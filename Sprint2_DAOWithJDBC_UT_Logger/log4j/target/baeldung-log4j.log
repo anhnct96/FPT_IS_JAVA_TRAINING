@@ -1,0 +1,57 @@
+2022-06-12 19:08:01 DEBUG HikariPool-1 - configuration:
+2022-06-12 19:08:01 DEBUG allowPoolSuspension.............false
+2022-06-12 19:08:01 DEBUG autoCommit......................true
+2022-06-12 19:08:01 DEBUG catalog.........................none
+2022-06-12 19:08:01 DEBUG connectionInitSql...............none
+2022-06-12 19:08:01 DEBUG connectionTestQuery.............none
+2022-06-12 19:08:01 DEBUG connectionTimeout...............30000
+2022-06-12 19:08:01 DEBUG dataSource......................none
+2022-06-12 19:08:01 DEBUG dataSourceClassName.............none
+2022-06-12 19:08:01 DEBUG dataSourceJNDI..................none
+2022-06-12 19:08:01 DEBUG dataSourceProperties............{password=<masked>, prepStmtCacheSqlLimit=2048, cachePrepStmts=true, user=root, prepStmtCacheSize=250}
+2022-06-12 19:08:01 DEBUG driverClassName.................none
+2022-06-12 19:08:01 DEBUG exceptionOverrideClassName......none
+2022-06-12 19:08:01 DEBUG healthCheckProperties...........{}
+2022-06-12 19:08:01 DEBUG healthCheckRegistry.............none
+2022-06-12 19:08:01 DEBUG idleTimeout.....................600000
+2022-06-12 19:08:01 DEBUG initializationFailTimeout.......1
+2022-06-12 19:08:01 DEBUG isolateInternalQueries..........false
+2022-06-12 19:08:01 DEBUG jdbcUrl.........................jdbc:mysql://localhost:3306/sprint2
+2022-06-12 19:08:01 DEBUG leakDetectionThreshold..........0
+2022-06-12 19:08:01 DEBUG maxLifetime.....................1800000
+2022-06-12 19:08:01 DEBUG maximumPoolSize.................10
+2022-06-12 19:08:01 DEBUG metricRegistry..................none
+2022-06-12 19:08:01 DEBUG metricsTrackerFactory...........none
+2022-06-12 19:08:01 DEBUG minimumIdle.....................10
+2022-06-12 19:08:01 DEBUG password........................<masked>
+2022-06-12 19:08:01 DEBUG poolName........................"HikariPool-1"
+2022-06-12 19:08:01 DEBUG readOnly........................false
+2022-06-12 19:08:01 DEBUG registerMbeans..................false
+2022-06-12 19:08:01 DEBUG scheduledExecutor...............none
+2022-06-12 19:08:01 DEBUG schema..........................none
+2022-06-12 19:08:01 DEBUG threadFactory...................internal
+2022-06-12 19:08:01 DEBUG transactionIsolation............default
+2022-06-12 19:08:01 DEBUG username........................none
+2022-06-12 19:08:01 DEBUG validationTimeout...............5000
+2022-06-12 19:08:01 INFO  HikariPool-1 - Starting...
+2022-06-12 19:08:01 DEBUG Loaded driver with class name com.mysql.cj.jdbc.Driver for jdbcUrl=jdbc:mysql://localhost:3306/sprint2
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5d908d47
+2022-06-12 19:08:03 INFO  HikariPool-1 - Start completed.
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Pool stats (total=1, active=1, idle=0, waiting=0)
+2022-06-12 19:08:03 ERROR java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '1' for key 'detective.PRIMARY'
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Add connection elided, waiting 1, queue 8
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@34b4d6ef
+2022-06-12 19:08:03 ERROR java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '2' for key 'detective.PRIMARY'
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Add connection elided, waiting 1, queue 7
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@549b29a0
+2022-06-12 19:08:03 ERROR java.sql.SQLIntegrityConstraintViolationException: Duplicate entry '3' for key 'detective.PRIMARY'
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Add connection elided, waiting 1, queue 6
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@4f770b78
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@50d51192
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@3582ad58
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@672a6605
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@39aec137
+2022-06-12 19:08:03 DEBUG HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@5d44843d
+2022-06-12 19:08:04 DEBUG HikariPool-1 - Added connection com.mysql.cj.jdbc.ConnectionImpl@1b83896e
+2022-06-12 19:08:04 DEBUG HikariPool-1 - After adding stats (total=10, active=4, idle=6, waiting=0)
+2022-06-12 19:08:04 INFO  Updated
