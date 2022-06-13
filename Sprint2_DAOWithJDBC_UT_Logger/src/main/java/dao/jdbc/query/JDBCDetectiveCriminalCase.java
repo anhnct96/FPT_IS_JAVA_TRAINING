@@ -1,6 +1,5 @@
 package dao.jdbc.query;
 
-import dao.IDetectiveCriminalCaseDAO;
-
-public class JDBCDetectiveCriminalCase implements IDetectiveCriminalCaseDAO {
+public class JDBCDetectiveCriminalCase  {
+    //TODO
 }
