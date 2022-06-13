@@ -33,8 +33,6 @@ public class DatabaseWriter {
             }
             detectivePreparedStatement.setString(13,detective.getStatus().toString());
 
-//            detectivePreparedStatement.setInt(14,2);
-//            detectivePreparedStatement.setInt(15,3);
         } catch (SQLException ex) {
             logger.trace(ex.toString());
         }
@@ -107,7 +105,7 @@ public class DatabaseWriter {
             trackEntryPreparedStatement.setDate(4,java.sql.Date.valueOf(trackEntry.getModifiedAt()
                     .toLocalDate()));
 
-            trackEntryPreparedStatement.setDate(4,java.sql.Date.valueOf(trackEntry.getDate()
+            trackEntryPreparedStatement.setDate(5,java.sql.Date.valueOf(trackEntry.getDate()
                     .toLocalDate()));
             trackEntryPreparedStatement.setString(6, trackEntry.getAction().toString());
             trackEntryPreparedStatement.setString(7, trackEntry.getReason());

@@ -1,17 +1,8 @@
 package dao.jdbc;
 
-import dao.ICriminalCaseDAO;
 import dao.IDetectiveDAO;
-import model.CriminalCase;
 import model.Detective;
-import model.enums.EmploymentStatus;
-import model.enums.Rank;
 import org.junit.jupiter.api.Test;
-
-import java.time.LocalDateTime;
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class JDBCDetectiveTest {
 

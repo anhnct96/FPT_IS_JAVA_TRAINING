@@ -1,7 +1,6 @@
 package dao.mem;
 
 import dao.IEvidenceDAO;
-import model.CriminalCase;
 import model.Evidence;
 
 import java.util.*;

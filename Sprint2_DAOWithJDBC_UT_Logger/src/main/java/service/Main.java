@@ -35,9 +35,9 @@ public class Main {
         detectiveDAO.save(detective3);
 
         Detective detective4 = new Detective(
-                3L,12, LocalDateTime.now(), LocalDateTime.now(),
-                "username3","firstname","lastname","password", LocalDateTime.now(),
-                "badge3", Rank.CHIEF_INSPECTOR,true, EmploymentStatus.ACTIVE
+                3L,100, LocalDateTime.now(), LocalDateTime.now(),
+                "username100","fistname hihi","hihi","haha", LocalDateTime.now(),
+                "badge300", Rank.CHIEF_INSPECTOR,true, EmploymentStatus.ACTIVE
         );
 
         //detectiveDAO.update(detective4);

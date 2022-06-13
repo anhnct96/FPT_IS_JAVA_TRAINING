@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JDBCDetective implements IDetectiveDAO {
+public class JDBCDetective extends IJDBCDAO implements IDetectiveDAO  {
     private final static Logger logger = LoggerFactory.getLogger(JDBCCriminalCase.class);
 
     @Override
@@ -22,7 +22,7 @@ public class JDBCDetective implements IDetectiveDAO {
         PreparedStatement stmt;
         try {
             con = DatabaseUtility.getConnection();
-            stmt = con.prepareStatement("INSERT INTO SPRINT2.DETECTIVE VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO Detective VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
             DatabaseWriter.setDetective(detective, stmt);
             if (stmt.executeUpdate() > 0) {
                 logger.info("Added a new detective successfully");
@@ -36,30 +36,9 @@ public class JDBCDetective implements IDetectiveDAO {
 
     @Override
     public Optional<Detective> get(long id) {
-        return getAll().stream().filter(detective -> detective.getId() == id).findFirst();
-    }
-
-    public boolean findById(long id) {
-        Detective detective;
-        boolean canFind = false;
-        try (Connection con = DatabaseUtility.getConnection()){
-             PreparedStatement stmt = con.prepareStatement("SELECT * FROM Detective WHERE id = ?");
-             stmt.setLong(1, id);
-             ResultSet rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                detective = DatabaseMapper.getDetective(rs);
-                if (detective == null) {
-                    logger.info("Can not found");
-                }
-                else {
-                    canFind = true;
-                }
-            }
-        } catch (Exception ex) {
-            logger.error(ex.toString());
-        }
-        return canFind;
+        return getAll().stream()
+                .filter(detective -> detective.getId() == id)
+                .findFirst();
     }
 
     @Override
@@ -85,7 +64,7 @@ public class JDBCDetective implements IDetectiveDAO {
     @Override
     public boolean update(Detective newDetective) {
         boolean isUpdated = false;
-        if (findById(newDetective.getId()) == false) {
+        if (findById(newDetective.getId()).isEmpty()) {
             logger.info("No detective with this id = "+newDetective.getId()+"to update");
         }
         else {
@@ -112,7 +91,7 @@ public class JDBCDetective implements IDetectiveDAO {
     @Override
     public boolean delete(Detective detective) {
         boolean canDelete = false;
-        if (!findById(detective.getId())) {
+        if (findById(detective.getId()).isEmpty()) {
             logger.info("No detective with id = "+detective.getId());
             return false;
         }
@@ -136,7 +115,7 @@ public class JDBCDetective implements IDetectiveDAO {
     @Override
     public boolean deleteById(long id) {
         boolean canDelete = false;
-        if (!findById(id)) {
+        if (findById(id).isEmpty()) {
             logger.info("No detective with the id = "+id);
         }
         else {
@@ -158,15 +137,42 @@ public class JDBCDetective implements IDetectiveDAO {
         return canDelete;
     }
 
-    public boolean deleteAll() {
-        int canDelete = 0;
-        try {
-            Connection con = DatabaseUtility.getConnection();
-            Statement st = con.createStatement();
-            canDelete = st.executeUpdate("DELETE FROM Detective");
-        } catch(Exception ex) {
+//    public boolean deleteAll() {
+//        int canDelete = 0;
+//        try {
+//            Connection con = DatabaseUtility.getConnection();
+//            Statement st = con.createStatement();
+//            canDelete = st.executeUpdate("DELETE FROM Detective");
+//        } catch(Exception ex) {
+//            logger.error(ex.toString());
+//        }
+//        return canDelete > 0;
+//    }
+
+    public static Optional<Detective> findById(long id) {
+        Detective detective = null;
+        try (Connection con = DatabaseUtility.getConnection()){
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Detective WHERE id = ?");
+            stmt.setLong(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                detective = DatabaseMapper.getDetective(rs);
+            }
+            Optional<Detective> optionalDetective = Optional.of(detective);
+
+            if (optionalDetective.isPresent()) {
+                return optionalDetective;
+            }
+        } catch (Exception ex) {
             logger.error(ex.toString());
         }
-        return canDelete > 0;
+        return Optional.empty();
+    }
+
+    private static final String deleteAll = "DELETE FROM Detective";
+
+    public void deleteAll () {
+        super.deleteAll(deleteAll);
     }
 }

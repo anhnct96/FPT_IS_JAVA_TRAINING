@@ -1,7 +1,6 @@
 package dao.mem;
 
 import dao.IDetectiveDAO;
-import model.CriminalCase;
 import model.Detective;
 
 import java.util.*;

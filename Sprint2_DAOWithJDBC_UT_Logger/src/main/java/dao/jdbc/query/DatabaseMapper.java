@@ -1,16 +1,20 @@
 package dao.jdbc.query;
 
+import dao.jdbc.JDBCCriminalCase;
+import dao.jdbc.JDBCDetective;
+import dao.jdbc.JDBCEvidence;
+import dao.jdbc.JDBCStorage;
 import model.*;
 import model.enums.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.sql.*;
+import java.util.Optional;
 
 
 public class DatabaseMapper {
     public static final Logger logger = LoggerFactory.getLogger(DatabaseMapper.class);
-
     public static Detective getDetective(ResultSet detectiveResultSet){
         try {
             Detective detective = new Detective();
@@ -37,7 +41,6 @@ public class DatabaseMapper {
         }
         return null;
     }
-
     public static CriminalCase getCriminalCase(ResultSet criminalCaseResultSet){
         try {
             CriminalCase criminalCase = new CriminalCase();
@@ -54,17 +57,17 @@ public class DatabaseMapper {
             criminalCase.setStatus(CaseStatus.valueOf(criminalCaseResultSet.getString("status")));
             criminalCase.setNotes(criminalCaseResultSet.getString("note"));
 
-//            criminalCase.setEvidenceSet((Set<Evidence>) criminalCaseResultSet.getObject("evidenceId"));
-//            criminalCase.setLeadInvestigator((Detective) criminalCaseResultSet.getObject("leadInvestigatorId"));
-//            criminalCase.setAssigned((Set<Detective>) criminalCaseResultSet.getObject("assignedId"));
-
+            Optional<Detective> optionalDetective = JDBCDetective
+                    .findById(criminalCaseResultSet.getLong("leadInvestigator"));
+            if (optionalDetective.isPresent()) {
+                criminalCase.setLeadInvestigator(optionalDetective.get());
+            }
             return criminalCase;
         }catch (SQLException ex){
             logger.error(ex.toString());
         }
         return null;
     }
-
     public static Evidence getEvidence(ResultSet evidenceResultSet){
         try {
             Evidence evidence = new Evidence();
@@ -79,13 +82,21 @@ public class DatabaseMapper {
             evidence.setNotes(evidenceResultSet.getString("note"));
             evidence.setArchived(evidenceResultSet.getInt("archived") == 1);
 
+            Optional<CriminalCase> optionalCriminalCase = JDBCCriminalCase
+                    .findById(evidenceResultSet.getLong("criminalCaseId"));
+            Optional<Storage> optionalStorage = JDBCStorage
+                    .findById(evidenceResultSet.getLong("storageId"));
+
+            if(optionalCriminalCase.isPresent())
+                evidence.setCriminalCase(optionalCriminalCase.get());
+            if(optionalStorage.isPresent())
+                evidence.setStorage(optionalStorage.get());
             return evidence;
         } catch (SQLException ex) {
             logger.error(ex.toString());
         }
         return null;
     }
-
     public static Storage getStorage(ResultSet storageResultSet){
         try {
             Storage storage = new Storage();
@@ -117,6 +128,17 @@ public class DatabaseMapper {
             trackEntry.setAction(TrackAction.valueOf(trackEntryResultSet.getString("action")));
             trackEntry.setReason(trackEntryResultSet.getString("reason"));
 
+            Optional<Detective> optionalDetective = JDBCDetective
+                    .findById(trackEntryResultSet.getLong("detectiveId"));
+            Optional<Evidence> optionalEvidence = JDBCEvidence
+                    .findById(trackEntryResultSet.getLong("evidenceId"));
+
+            if(optionalDetective.isPresent()) {
+                trackEntry.setDetective(optionalDetective.get());
+            }
+            if(optionalEvidence.isPresent()) {
+                trackEntry.setEvidence(optionalEvidence.get());
+            }
             return trackEntry;
         } catch (SQLException ex) {
             logger.error(ex.toString());

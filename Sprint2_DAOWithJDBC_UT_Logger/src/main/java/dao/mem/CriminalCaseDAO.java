@@ -7,7 +7,6 @@ import java.util.*;
 
 public class CriminalCaseDAO implements ICriminalCaseDAO {
 
-    @Override
     public void delete(long id) {
         for(CriminalCase criminalCase : MemoryDataSource.CRIMINAL_CASES_LIST) {
             if (criminalCase.getId() == id){
