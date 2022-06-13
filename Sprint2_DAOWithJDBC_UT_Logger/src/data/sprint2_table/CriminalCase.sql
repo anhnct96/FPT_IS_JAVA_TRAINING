@@ -11,11 +11,11 @@ type ENUM('UNCATEGORIZED', 'INFRACTION', 'MISDEMEANOR', 'FELONY'),
 shortDescription VARCHAR(500) NOT NULL,
 detailedDescription TEXT NOT NULL,
 status ENUM('SUBMITTED', 'UNDER_INVESTIGATION', 'IN_COURT', 'CLOSED', 'DISMISSED', 'COLD'),
-note VARCHAR(500) NOT NULL,
+notes VARCHAR(500) NOT NULL,
 
 leadInvestigatorId INT,
 
 CONSTRAINT pk_cc PRIMARY KEY (id),
 
-CONSTRAINT lead_investigator FOREIGN KEY leadInvestigatorId REFERENCES Detective(id)
+CONSTRAINT lead_investigator FOREIGN KEY (leadInvestigatorId) REFERENCES Detective(id)
 )
