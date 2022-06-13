@@ -11,5 +11,11 @@ itemName VARCHAR(100) NOT NULL,
 note VARCHAR(500) NOT NULL,
 archived SMAlLINT(1) NOT NULL,
 
-CONSTRAINT pk_e PRIMARY KEY (id)
+criminalCaseId INT,
+storageId INT,
+
+CONSTRAINT pk_e PRIMARY KEY (id),
+
+CONSTRAINT cc_fk FOREIGN KEY criminalCaseId REFERENCES CriminalCase(id),
+CONSTRAINT s_fk FOREIGN KEY storageId REFERENCES Storage(id),
 )
