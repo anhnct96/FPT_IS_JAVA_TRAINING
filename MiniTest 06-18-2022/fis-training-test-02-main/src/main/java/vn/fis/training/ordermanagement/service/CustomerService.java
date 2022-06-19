@@ -9,8 +9,8 @@ public interface CustomerService {
     Customer createCustomer(Customer customer);
     Customer updateCustomer(Customer customer);
     void deleteCustomerById(Long customerId);
+    void deleteAll();
     List<Customer> findAll();
     Customer findByMobileEquals(String mobileNumber);
-
     Optional<Customer> findById(Long Id);
 }

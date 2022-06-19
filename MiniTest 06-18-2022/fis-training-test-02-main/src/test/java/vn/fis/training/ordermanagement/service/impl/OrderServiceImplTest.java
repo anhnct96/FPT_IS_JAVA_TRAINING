@@ -1,7 +1,7 @@
 package vn.fis.training.ordermanagement.service.impl;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
@@ -20,40 +20,64 @@ class OrderServiceImplTest {
     @Autowired
     OrderService orderService;
 
+    Order orderNotExistInDB;
+
+    @BeforeEach
+    void init() {
+        orderNotExistInDB = new Order(10L,
+                LocalDateTime.of(2022,06,18,00,00,00));
+    }
+
     @Test
     @Transactional
     @Rollback
     void createOrder() {
-        Order order = new Order(7L,
-                LocalDateTime.of(2022,06,18,00,00,00));
-        orderService.createOrder(order);
+        // size = 7 in db, expected 8 after adding
+        int expectedSize = 8;
+
+        orderService.createOrder(orderNotExistInDB);
+        int actualSize = orderService.findAll().size();
+
+        assertEquals(expectedSize, actualSize);
     }
 
     @Test
+    @Transactional
+    @Rollback
     void addOrderItem() {
         Customer customer = new Customer(1L,"Thao","0125416879","nam dinh");
-
         Order order = new Order(1L, LocalDateTime.of(2022,06,18,00,00,00),
-                customer , 300040d, OrderStatus.PAID);
-
-        Product product = new Product(1L, "mi tom", 4000D);
-
-        OrderItem orderItem = new OrderItem(10L, order , product, 4, 5000D);
+                customer , 100000.0, OrderStatus.PAID);
+        Product product = new Product(5L, "quay", 40000D);
+        OrderItem orderItem = new OrderItem(7L, order , product, 10, 50.0);
 
         orderService.addOrderItem(1L, orderItem);
     }
 
     @Test
+    @Transactional
+    @Rollback
     void removeOrderItem() {
+        Customer customer = new Customer(1L,"Thao","0125416879","nam dinh");
+        Order order = new Order(1L, LocalDateTime.of(2022,06,18,00,00,00),
+                customer , 100000.0, OrderStatus.PAID);
+        Product product = new Product(5L, "quay", 40000D);
+        OrderItem orderItem = new OrderItem(5L, order , product, 10, 50.0);
+
+        orderService.removeOrderItem(1L, orderItem);
     }
 
     @Test
     @Transactional
     @Rollback
     void updateOrderStatus() {
-        Order order = new Order (2L);
-        //orderService.updateOrderStatus(order, OrderStatus.PAID);
-        System.out.println(orderService.updateOrderStatus(order, OrderStatus.PAID));
+        Order order = new Order (2L); //WAITING_APPROVAL
+        OrderStatus expectedStatus = orderService.findById(2L).get().getStatus();
+
+        OrderStatus actualStatus = orderService.updateOrderStatus(order, OrderStatus.PAID).getStatus();
+
+        assertNotEquals(expectedStatus, actualStatus);
+        assertEquals(OrderStatus.PAID, actualStatus);
     }
 
     @Test
@@ -121,4 +145,6 @@ class OrderServiceImplTest {
 
         assertEquals(expectedOrderListSize, actualOrderListSize);
     }
+
+
 }

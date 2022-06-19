@@ -1,5 +1,8 @@
 package vn.fis.training.ordermanagement.domain;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,11 +13,12 @@ public class OrderItem {
     @Column(name="id")
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.REMOVE)
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="order_id",nullable = false)
     private Order order;
 
-    @ManyToOne(cascade= CascadeType.REMOVE)
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
     @JoinColumn(name="product_id")
     private Product product;
 

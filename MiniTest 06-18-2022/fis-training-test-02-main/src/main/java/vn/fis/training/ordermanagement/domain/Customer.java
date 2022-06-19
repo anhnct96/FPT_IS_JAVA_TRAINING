@@ -1,5 +1,8 @@
 package vn.fis.training.ordermanagement.domain;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.util.Objects;
 

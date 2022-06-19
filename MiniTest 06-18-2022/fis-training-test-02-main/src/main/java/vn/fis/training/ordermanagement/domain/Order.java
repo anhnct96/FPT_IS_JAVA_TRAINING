@@ -1,5 +1,8 @@
 package vn.fis.training.ordermanagement.domain;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,11 +24,12 @@ public class Order {
     @Column(name="order_datetime")
     private LocalDateTime orderDateTime;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.REMOVE, CascadeType.PERSIST})
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="customer_id")
     private Customer customer;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER, cascade= CascadeType.REMOVE, orphanRemoval=true)
+    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
     private List<OrderItem> orderItems;
 
     @Column(name="totalAmount")

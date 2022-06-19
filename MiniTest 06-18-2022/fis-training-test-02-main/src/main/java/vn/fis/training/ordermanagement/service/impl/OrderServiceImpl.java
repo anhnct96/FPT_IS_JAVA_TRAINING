@@ -6,12 +6,15 @@ import vn.fis.training.ordermanagement.domain.Customer;
 import vn.fis.training.ordermanagement.domain.Order;
 import vn.fis.training.ordermanagement.domain.OrderItem;
 import vn.fis.training.ordermanagement.domain.OrderStatus;
+import vn.fis.training.ordermanagement.repository.OrderItemRepository;
 import vn.fis.training.ordermanagement.repository.OrderRepository;
 import vn.fis.training.ordermanagement.service.OrderService;
 
+import javax.management.InvalidAttributeValueException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -19,7 +22,8 @@ import java.util.Optional;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     private OrderRepository orderRepository;
-
+    @Autowired
+    private OrderItemRepository orderItemRepository;
     @Override
     public Order createOrder(Order order) {
         return orderRepository.save(order);
@@ -28,37 +32,42 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Order addOrderItem(Long orderId, OrderItem orderItem) {
         Optional<Order> orderOptional = orderRepository.findById(orderId);
-        if (!orderOptional.isPresent()) {
-            throw new NoSuchElementException("No such order with orderId = " +orderId);
+        Optional<Order> orderInOrderItemOptional = orderRepository.findById(orderItem.getOrder().getId());
+        if (!orderOptional.isPresent() || !orderInOrderItemOptional.isPresent()) {
+            throw new NoSuchElementException("No such order_id");
         }
-        else {
-            Order order = orderOptional.get();
-            Double addedAmount = orderItem.getAmount() * orderItem.getQuantity();
-            order.setTotalAmount( order.getTotalAmount() + addedAmount);
-            order.getOrderItems().add(orderItem);
-            orderRepository.save(order);
+        if (!Objects.equals(orderItem.getOrder().getId(), orderId)) {
+            throw new NoSuchElementException("No such order_id");
         }
+        Order order = orderOptional.get();
+        Double minusAmount = orderItem.getProduct().getPrice() * orderItem.getQuantity();
+        order.setTotalAmount( order.getTotalAmount() + minusAmount);
+        order.getOrderItems().add(orderItem);
+        orderItemRepository.save(orderItem);
+        orderRepository.save(order);
 
-        return orderOptional.get();
+
+        return order;
     }
 
     @Override
     public Order removeOrderItem(Long orderId, OrderItem orderItem) {
         Optional<Order> orderOptional = orderRepository.findById(orderId);
-        if (!orderOptional.isPresent()) {
-            throw new NoSuchElementException("No such order with id = " +orderId);
+        Optional<Order> orderInOrderItemOptional = orderRepository.findById(orderItem.getOrder().getId());
+        if (!orderOptional.isPresent() || !orderInOrderItemOptional.isPresent()) {
+            throw new NoSuchElementException("No such order_id");
         }
-        else {
-            Order order = orderOptional.get();
-            order.getOrderItems().remove(orderItem);
-            order.setTotalAmount(
-                    order.getTotalAmount() -
-                            orderItem.getAmount() * orderItem.getQuantity()
-            );
-            orderRepository.save(order);
+        if (!Objects.equals(orderItem.getOrder().getId(), orderId)) {
+            throw new NoSuchElementException("No such order_id");
         }
+        Order order = orderOptional.get();
+        Double minusAmount = orderItem.getProduct().getPrice() * orderItem.getQuantity();
+        order.setTotalAmount( order.getTotalAmount() - minusAmount);
+        order.getOrderItems().remove(orderItem);
+        orderRepository.save(order);
+        orderItemRepository.delete(orderItem);
 
-        return orderOptional.get();
+        return order;
     }
 
     @Override
@@ -92,7 +101,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<Order> findOrdersByCustomer(Customer customer) {
-        Long id = customer.getId();
-        return orderRepository.findByCustomerIdEquals(id);
+        List<Order> orderListByCustomer = orderRepository.findByCustomerIdEquals(customer.getId());
+        if (orderListByCustomer== null) {
+            throw new NoSuchElementException("This customer with id = "+customer.getId()+" never orders anything!");
+        }
+        else {
+            return orderListByCustomer;
+        }
+    }
+
+    @Override
+    public List<Order> findAll() {
+        return orderRepository.findAll();
+    }
+
+    @Override
+    public Optional<Order> findById(Long id) {
+        return orderRepository.findById(id);
     }
 }

@@ -18,16 +18,16 @@ public class OrderManagementApplication {
 	}
 
 
-	@Autowired
-	private OrderService orderService;
-	@Bean
-	CommandLineRunner commandLineRunner() {
-		return new CommandLineRunner() {
-			@Override
-			public void run(String... args) throws Exception {
-				log.info("Welcome to spring application. Pls write test method in here to run for testing only");
-				log.info("Total order with wating status : {} order(s)", orderService.findOrdersByOrderStatus(OrderStatus.WAITING_APPROVAL).size());
-			}
-		};
-	}
+//	@Autowired
+//	private OrderService orderService;/
+//	@Bean
+//	CommandLineRunner commandLineRunner() {
+//		return new CommandLineRunner() {
+//			@Override
+//			public void run(String... args) throws Exception {
+//				log.info("Welcome to spring application. Pls write test method in here to run for testing only");
+//				log.info("Total order with wating status : {} order(s)", orderService.findOrdersByOrderStatus(OrderStatus.WAITING_APPROVAL).size());
+//			}
+//		};
+//	}
 }
