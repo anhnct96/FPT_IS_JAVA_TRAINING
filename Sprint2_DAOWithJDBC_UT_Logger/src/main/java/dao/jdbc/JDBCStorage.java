@@ -1,5 +1,6 @@
 package dao.jdbc;
 
+import dao.IDAO;
 import dao.IStorageDAO;
 import dao.jdbc.query.DatabaseMapper;
 import dao.jdbc.query.DatabaseWriter;
@@ -8,14 +9,12 @@ import model.Storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JDBCStorage extends IJDBCDAO implements IStorageDAO {
+public class JDBCStorage implements IStorageDAO {
     private final static Logger logger = LoggerFactory.getLogger(JDBCStorage.class);
 
     public static Optional<Storage> findById(long id) {
@@ -98,4 +97,24 @@ public class JDBCStorage extends IJDBCDAO implements IStorageDAO {
     public boolean deleteById(long id) {
         return false;
     }
+
+    private static final String deleteAll = "DELETE FROM Storage";
+
+    public void deleteAll() {
+        try (
+                Connection con = DatabaseUtility.getConnection();
+                Statement st = con.createStatement();
+        ) {
+            st.executeUpdate(deleteAll);
+        } catch (SQLException ex) {
+            logger.error(ex.toString());
+        } catch (Exception ex) {
+            logger.error(ex.toString());
+        }
+    }
+
+    public int count() {
+        return getAll().size();
+    }
+
 }

@@ -53,10 +53,23 @@ public class CriminalCaseDAO implements ICriminalCaseDAO {
 
     @Override
     public boolean deleteById(long id) {
-        CriminalCase criminalCase = MemoryDataSource.CRIMINAL_CASES_LIST.stream()
+        Optional<CriminalCase> criminalCase = MemoryDataSource.CRIMINAL_CASES_LIST.stream()
                 .filter(item -> item.getId() == id)
-                .findFirst()
-                .get();
-        return MemoryDataSource.CRIMINAL_CASES_LIST.remove(criminalCase);
+                .findFirst();
+        if (criminalCase.isPresent()) {
+            return MemoryDataSource.CRIMINAL_CASES_LIST.remove(criminalCase);
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public int count() {
+        return MemoryDataSource.CRIMINAL_CASES_LIST.size();
+    }
+
+    public void deleteAll() {
+        MemoryDataSource.CRIMINAL_CASES_LIST.clear();
     }
 }

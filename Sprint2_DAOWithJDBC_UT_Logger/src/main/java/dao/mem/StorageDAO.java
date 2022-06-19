@@ -44,10 +44,23 @@ public class StorageDAO implements IStorageDAO {
 
     @Override
     public boolean deleteById(long id) {
-        Storage storage = MemoryDataSource.STORAGE_LIST.stream()
+        Optional<Storage> storage = MemoryDataSource.STORAGE_LIST.stream()
                 .filter(item -> item.getId() == id)
-                .findFirst()
-                .get();
-        return MemoryDataSource.STORAGE_LIST.remove(storage);
+                .findFirst();
+        if (storage.isPresent()) {
+            return MemoryDataSource.STORAGE_LIST.remove(storage.get());
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public int count() {
+        return MemoryDataSource.STORAGE_LIST.size();
+    }
+
+    public void deleteAll() {
+        MemoryDataSource.STORAGE_LIST.clear();
     }
 }

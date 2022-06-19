@@ -1,6 +1,7 @@
 package dao.jdbc;
 
 import dao.ICriminalCaseDAO;
+import dao.IDAO;
 import dao.jdbc.query.DatabaseMapper;
 import dao.jdbc.query.DatabaseUpdate;
 import dao.jdbc.query.DatabaseWriter;
@@ -13,8 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JDBCCriminalCase extends IJDBCDAO implements ICriminalCaseDAO {
+public class JDBCCriminalCase implements ICriminalCaseDAO {
     private final static Logger logger = LoggerFactory.getLogger(JDBCCriminalCase.class);
+
+    public int count() {
+        return getAll().size();
+    }
 
     @Override
     public void save(CriminalCase criminalCase) {
@@ -160,7 +165,16 @@ public class JDBCCriminalCase extends IJDBCDAO implements ICriminalCaseDAO {
 
     private static final String deleteAll = "DELETE FROM CriminalCase";
 
-    public void deleteAll () {
-        super.deleteAll(deleteAll);
+    public void deleteAll() {
+        try (
+                Connection con = DatabaseUtility.getConnection();
+                Statement st = con.createStatement();
+        ) {
+            st.executeUpdate(deleteAll);
+        } catch (SQLException ex) {
+            logger.error(ex.toString());
+        } catch (Exception ex) {
+            logger.error(ex.toString());
+        }
     }
 }

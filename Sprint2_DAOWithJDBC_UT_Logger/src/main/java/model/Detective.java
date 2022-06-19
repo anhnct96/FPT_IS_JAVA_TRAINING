@@ -15,6 +15,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Detective extends AbstractEntity<Detective>{
     /**
      * userName: not null or blank, unique, distinct.
@@ -104,20 +105,6 @@ public class Detective extends AbstractEntity<Detective>{
         this.rank = rank;
         this.armed = armed;
         this.status = status;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Detective detective = (Detective) o;
-        return armed == detective.armed && username.equals(detective.username) && firstName.equals(detective.firstName) && lastName.equals(detective.lastName) && password.equals(detective.password) && hiringDate.equals(detective.hiringDate) && badgeNumber.equals(detective.badgeNumber) && rank == detective.rank && status == detective.status && criminalCaseSet.equals(detective.criminalCaseSet) && trackEntrySet.equals(detective.trackEntrySet);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), username, firstName, lastName, password, hiringDate, badgeNumber, rank, armed, status, criminalCaseSet, trackEntrySet);
     }
 
     @Override

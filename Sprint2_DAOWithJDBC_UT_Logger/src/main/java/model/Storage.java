@@ -1,9 +1,8 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,6 +13,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Storage extends AbstractEntity<Storage>{
     /**
      * name: not null or blank.
@@ -34,18 +35,10 @@ public class Storage extends AbstractEntity<Storage>{
      */
     private Set<Evidence> evidenceSet;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Storage storage = (Storage) o;
-        return name.equals(storage.name) && location.equals(storage.location) && evidenceSet.equals(storage.evidenceSet);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), name, location, evidenceSet);
+    public Storage(long id, int version, LocalDateTime createdAt, LocalDateTime modifiedAt, String name, String location) {
+        super(id, version, createdAt, modifiedAt);
+        this.name = name;
+        this.location = location;
     }
 
     @Override

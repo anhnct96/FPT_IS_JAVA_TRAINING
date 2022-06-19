@@ -1,8 +1,6 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import model.enums.TrackAction;
 
 import java.time.LocalDateTime;
@@ -18,6 +16,8 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class TrackEntry extends AbstractEntity<TrackEntry>{
     /**
      * date: not null or blank.
@@ -49,19 +49,6 @@ public class TrackEntry extends AbstractEntity<TrackEntry>{
      */
     private String reason;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        TrackEntry that = (TrackEntry) o;
-        return date.equals(that.date) && evidence.equals(that.evidence) && detective.equals(that.detective) && action == that.action && reason.equals(that.reason);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), date, evidence, detective, action, reason);
-    }
 
     @Override
     public int compareTo(TrackEntry o) {
@@ -80,5 +67,14 @@ public class TrackEntry extends AbstractEntity<TrackEntry>{
 
         this.detective = newTrackEntry.getDetective();
         this.evidence = newTrackEntry.getEvidence();
+    }
+
+    public TrackEntry(long id, int version, LocalDateTime createdAt, LocalDateTime modifiedAt, LocalDateTime date, Evidence evidence, Detective detective, TrackAction action, String reason) {
+        super(id, version, createdAt, modifiedAt);
+        this.date = date;
+        this.evidence = evidence;
+        this.detective = detective;
+        this.action = action;
+        this.reason = reason;
     }
 }

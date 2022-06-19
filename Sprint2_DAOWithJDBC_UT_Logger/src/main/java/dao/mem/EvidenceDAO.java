@@ -44,10 +44,23 @@ public class EvidenceDAO implements IEvidenceDAO {
 
     @Override
     public boolean deleteById(long id) {
-        Evidence evidence = MemoryDataSource.EVIDENCE_LIST.stream()
+        Optional<Evidence> evidence = MemoryDataSource.EVIDENCE_LIST.stream()
                 .filter(item -> item.getId() == id)
-                .findFirst()
-                .get();
-        return MemoryDataSource.EVIDENCE_LIST.remove(evidence);
+                .findFirst();
+        if (evidence.isPresent()) {
+            return MemoryDataSource.EVIDENCE_LIST.remove(evidence);
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public int count() {
+        return MemoryDataSource.EVIDENCE_LIST.size();
+    }
+
+    public void deleteAll() {
+        MemoryDataSource.EVIDENCE_LIST.clear();
     }
 }

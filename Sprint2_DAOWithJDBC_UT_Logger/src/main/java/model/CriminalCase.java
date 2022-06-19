@@ -1,11 +1,10 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import model.enums.CaseStatus;
 import model.enums.CaseType;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -17,6 +16,9 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
+
 public class CriminalCase extends AbstractEntity<CriminalCase>{
     /**
      * number: not null or blank, unique, distinct.
@@ -75,46 +77,15 @@ public class CriminalCase extends AbstractEntity<CriminalCase>{
      */
     private Set<Detective> assigned;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        CriminalCase that = (CriminalCase) o;
-        return number.equals(that.number) && type == that.type && shortDescription.equals(that.shortDescription)
-                && detailedDescription.equals(that.detailedDescription) && status == that.status
-                && notes.equals(that.notes) && evidenceSet.equals(that.evidenceSet)
-                && leadInvestigator.equals(that.leadInvestigator) && assigned.equals(that.assigned);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), number, type, shortDescription, detailedDescription, status, notes,
-                evidenceSet, leadInvestigator, assigned);
-    }
-
-    @Override
-    public int compareTo(CriminalCase o) {
-        return 0;
-    }
-
-    @Override
-    public String toString() {
-        return "CriminalCase{" +
-                "number='" + number + '\'' +
-                ", type=" + type +
-                ", shortDescription='" + shortDescription + '\'' +
-                ", detailedDescription='" + detailedDescription + '\'' +
-                ", status=" + status +
-                ", notes='" + notes + '\'' +
-                ", evidenceSet=" + evidenceSet +
-                ", leadInvestigator=" + leadInvestigator +
-                ", assigned=" + assigned +
-                ", id=" + id +
-                ", version=" + version +
-                ", createdAt=" + createdAt +
-                ", modifiedAt=" + modifiedAt +
-                '}';
+    public CriminalCase(long id, int version, LocalDateTime createdAt, LocalDateTime modifiedAt, String number, CaseType type, String shortDescription, String detailedDescription, CaseStatus status, String notes, Detective leadInvestigator) {
+        super(id, version, createdAt, modifiedAt);
+        this.number = number;
+        this.type = type;
+        this.shortDescription = shortDescription;
+        this.detailedDescription = detailedDescription;
+        this.status = status;
+        this.notes = notes;
+        this.leadInvestigator = leadInvestigator;
     }
 
     public void replaceWith(CriminalCase newCriminalCase){
@@ -133,5 +104,10 @@ public class CriminalCase extends AbstractEntity<CriminalCase>{
         this.evidenceSet = newCriminalCase.getEvidenceSet();
         this.leadInvestigator = newCriminalCase.getLeadInvestigator();
         this.assigned = newCriminalCase.getAssigned();
+    }
+
+    @Override
+    public int compareTo(CriminalCase o) {
+        return 0;
     }
 }

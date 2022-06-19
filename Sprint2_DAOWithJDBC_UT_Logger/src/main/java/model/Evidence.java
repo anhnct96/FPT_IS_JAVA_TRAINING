@@ -1,9 +1,8 @@
 package model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -14,6 +13,8 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
+@ToString
 public class Evidence extends AbstractEntity<Evidence>{
 
     /**
@@ -58,24 +59,6 @@ public class Evidence extends AbstractEntity<Evidence>{
      */
     private Set<TrackEntry> trackEntrySet;
 
-    public Evidence(long id) {
-        super.setId(id);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Evidence evidence = (Evidence) o;
-        return archived == evidence.archived && criminalCase.equals(evidence.criminalCase) && storage.equals(evidence.storage) && number.equals(evidence.number) && itemName.equals(evidence.itemName) && notes.equals(evidence.notes) && trackEntrySet.equals(evidence.trackEntrySet);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), criminalCase, storage, number, itemName, notes, archived, trackEntrySet);
-    }
-
     @Override
     public int compareTo(Evidence o) {
         return 0;
@@ -95,5 +78,15 @@ public class Evidence extends AbstractEntity<Evidence>{
 
         this.criminalCase = newEvidence.getCriminalCase();
         this.trackEntrySet = newEvidence.getTrackEntrySet();
+    }
+
+    public Evidence(long id, int version, LocalDateTime createdAt, LocalDateTime modifiedAt, CriminalCase criminalCase, Storage storage, String number, String itemName, String notes, boolean archived) {
+        super(id, version, createdAt, modifiedAt);
+        this.criminalCase = criminalCase;
+        this.storage = storage;
+        this.number = number;
+        this.itemName = itemName;
+        this.notes = notes;
+        this.archived = archived;
     }
 }

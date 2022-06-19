@@ -7,11 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="Sprint1_DataModel_DAOInMemory" />
+        <module name="Sprint2_DAOWithJDBC_UT_Logger" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="Sprint1_DataModel_DAOInMemory" target="16" />
+      <module name="Sprint2_DAOWithJDBC_UT_Logger" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

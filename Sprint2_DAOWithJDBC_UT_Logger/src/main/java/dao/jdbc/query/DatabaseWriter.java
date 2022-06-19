@@ -1,6 +1,7 @@
 package dao.jdbc.query;
 
 import model.*;
+import model.utility.Utility;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,17 +14,14 @@ public class DatabaseWriter {
         try {
             detectivePreparedStatement.setLong(1,detective.getId());
             detectivePreparedStatement.setInt(2,detective.getVersion());
-            detectivePreparedStatement.setDate(3, java.sql.Date.valueOf(detective.getCreatedAt()
-                    .toLocalDate()));
-            detectivePreparedStatement.setDate(4,java.sql.Date.valueOf(detective.getModifiedAt()
-                    .toLocalDate()));
+            detectivePreparedStatement.setTimestamp(3, Utility.unformattedLDTToTimestamp(detective.getCreatedAt()));
+            detectivePreparedStatement.setTimestamp(4,Utility.unformattedLDTToTimestamp(detective.getModifiedAt()));
 
             detectivePreparedStatement.setString(5, detective.getUsername());
             detectivePreparedStatement.setString(6, detective.getFirstName());
             detectivePreparedStatement.setString(7, detective.getLastName());
             detectivePreparedStatement.setString(8,detective.getPassword());
-            detectivePreparedStatement.setDate(9,java.sql.Date.valueOf(detective.getHiringDate()
-                    .toLocalDate()));
+            detectivePreparedStatement.setTimestamp(9,Utility.unformattedLDTToTimestamp(detective.getHiringDate()));
             detectivePreparedStatement.setString(10,detective.getBadgeNumber());
             detectivePreparedStatement.setString(11, detective.getRank().toString());
             if (detective.isArmed() == true) {

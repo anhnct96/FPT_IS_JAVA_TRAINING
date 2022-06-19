@@ -1,5 +1,6 @@
 package dao.jdbc;
 
+import dao.IDAO;
 import dao.ITrackEntryDAO;
 import dao.jdbc.query.DatabaseMapper;
 import dao.jdbc.query.DatabaseUpdate;
@@ -9,14 +10,12 @@ import model.TrackEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JDBCTrackEntry extends IJDBCDAO implements ITrackEntryDAO {
+public class JDBCTrackEntry implements ITrackEntryDAO {
 
     private final static Logger logger = LoggerFactory.getLogger(JDBCTrackEntry.class);
 
@@ -143,8 +142,21 @@ public class JDBCTrackEntry extends IJDBCDAO implements ITrackEntryDAO {
 
     private static final String deleteAll = "DELETE FROM TrackEntry";
 
-    public void deleteAll () {
-        super.deleteAll(deleteAll);
+    public void deleteAll() {
+        try (
+                Connection con = DatabaseUtility.getConnection();
+                Statement st = con.createStatement();
+        ) {
+            st.executeUpdate(deleteAll);
+        } catch (SQLException ex) {
+            logger.error(ex.toString());
+        } catch (Exception ex) {
+            logger.error(ex.toString());
+        }
+    }
+
+    public int count() {
+        return getAll().size();
     }
 
     public static Optional<TrackEntry> findById(long id) {

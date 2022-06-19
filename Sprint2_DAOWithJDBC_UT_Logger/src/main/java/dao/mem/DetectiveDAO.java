@@ -43,10 +43,24 @@ public class DetectiveDAO implements IDetectiveDAO {
 
     @Override
     public boolean deleteById(long id) {
-        Detective detective = MemoryDataSource.DETECTIVES_LIST.stream()
+        Optional<Detective> detective = MemoryDataSource.DETECTIVES_LIST.stream()
                 .filter(item -> item.getId() == id)
-                .findFirst()
-                .get();
-        return MemoryDataSource.DETECTIVES_LIST.remove(detective);
+                .findFirst();
+        if (detective.isPresent()) {
+            return MemoryDataSource.DETECTIVES_LIST.remove(detective);
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public void deleteAll() {
+        MemoryDataSource.DETECTIVES_LIST.clear();
+    }
+
+    @Override
+    public int count() {
+        return MemoryDataSource.DETECTIVES_LIST.size();
     }
 }

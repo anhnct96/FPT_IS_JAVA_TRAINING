@@ -44,10 +44,23 @@ public class TrackEntryDAO implements ITrackEntryDAO {
 
     @Override
     public boolean deleteById(long id) {
-        TrackEntry trackEntry = MemoryDataSource.TRACK_ENTRY_LIST.stream()
+        Optional<TrackEntry> trackEntry = MemoryDataSource.TRACK_ENTRY_LIST.stream()
                 .filter(item -> item.getId() == id)
-                .findFirst()
-                .get();
-        return MemoryDataSource.TRACK_ENTRY_LIST.remove(trackEntry);
+                .findFirst();
+        if (trackEntry.isPresent()) {
+            return MemoryDataSource.TRACK_ENTRY_LIST.remove(trackEntry.get());
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public int count() {
+        return MemoryDataSource.TRACK_ENTRY_LIST.size();
+    }
+
+    public void deleteAll() {
+        MemoryDataSource.TRACK_ENTRY_LIST.clear();
     }
 }

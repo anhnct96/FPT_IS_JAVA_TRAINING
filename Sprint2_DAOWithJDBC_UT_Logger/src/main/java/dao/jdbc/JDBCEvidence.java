@@ -1,5 +1,6 @@
 package dao.jdbc;
 
+import dao.IDAO;
 import dao.IEvidenceDAO;
 import dao.jdbc.query.DatabaseMapper;
 import dao.jdbc.query.DatabaseUpdate;
@@ -8,16 +9,18 @@ import model.Evidence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JDBCEvidence extends IJDBCDAO implements IEvidenceDAO {
+public class JDBCEvidence implements IEvidenceDAO {
 
     private final static Logger logger = LoggerFactory.getLogger(JDBCEvidence.class);
+
+    public int count() {
+        return getAll().size();
+    }
 
     @Override
     public void save(Evidence evidence) {
@@ -163,7 +166,16 @@ public class JDBCEvidence extends IJDBCDAO implements IEvidenceDAO {
 
     private static final String deleteAll = "DELETE FROM Evidence";
 
-    public void deleteAll () {
-        super.deleteAll(deleteAll);
+    public void deleteAll() {
+        try (
+                Connection con = DatabaseUtility.getConnection();
+                Statement st = con.createStatement();
+        ) {
+            st.executeUpdate(deleteAll);
+        } catch (SQLException ex) {
+            logger.error(ex.toString());
+        } catch (Exception ex) {
+            logger.error(ex.toString());
+        }
     }
 }

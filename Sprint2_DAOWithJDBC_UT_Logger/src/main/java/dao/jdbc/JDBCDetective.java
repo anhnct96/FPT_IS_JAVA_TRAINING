@@ -1,5 +1,6 @@
 package dao.jdbc;
 
+import dao.IDAO;
 import dao.IDetectiveDAO;
 import dao.jdbc.query.DatabaseMapper;
 import dao.jdbc.query.DatabaseUpdate;
@@ -13,16 +14,29 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class JDBCDetective extends IJDBCDAO implements IDetectiveDAO  {
-    private final static Logger logger = LoggerFactory.getLogger(JDBCCriminalCase.class);
+public class JDBCDetective implements IDetectiveDAO  {
+    private final static Logger logger = LoggerFactory.getLogger(JDBCDetective.class);
 
-    @Override
+    public int count() {
+        int size = 0;
+        try (
+                Connection con = DatabaseUtility.getConnection();
+                Statement stmt = con.createStatement();
+        ) {
+            ResultSet rs = stmt.executeQuery("SELECT COUNT(*) AS RECORD_COUNT FROM DETECTIVE");
+            rs.next();
+            size = rs.getInt("RECORD_COUNT");
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return size;
+    }
+        @Override
     public void save(Detective detective) {
-        Connection con;
-        PreparedStatement stmt;
-        try {
-            con = DatabaseUtility.getConnection();
-            stmt = con.prepareStatement("INSERT INTO Detective VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        try (
+            Connection con = DatabaseUtility.getConnection();
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO Detective VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            ){
             DatabaseWriter.setDetective(detective, stmt);
             if (stmt.executeUpdate() > 0) {
                 logger.info("Added a new detective successfully");
@@ -36,9 +50,33 @@ public class JDBCDetective extends IJDBCDAO implements IDetectiveDAO  {
 
     @Override
     public Optional<Detective> get(long id) {
-        return getAll().stream()
-                .filter(detective -> detective.getId() == id)
-                .findFirst();
+        ResultSet rs = null;
+        Detective detective = null;
+        try (Connection con = DatabaseUtility.getConnection();
+            PreparedStatement stmt = con.prepareStatement("SELECT * FROM Detective WHERE id = ?");
+
+        ) {
+            stmt.setLong(1, id);
+            rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                detective = DatabaseMapper.getDetective(rs);
+            }
+            Optional<Detective> optionalDetective = Optional.of(detective);
+
+            if (optionalDetective.isPresent()) {
+                return optionalDetective;
+            }
+        } catch (Exception ex) {
+            logger.error(ex.toString());
+        } finally {
+            try {
+                rs.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return Optional.empty();
     }
 
     @Override
@@ -95,8 +133,9 @@ public class JDBCDetective extends IJDBCDAO implements IDetectiveDAO  {
             logger.info("No detective with id = "+detective.getId());
             return false;
         }
-        try {
-            Connection con = DatabaseUtility.getConnection();
+        try (
+            Connection con = DatabaseUtility.getConnection()
+        ) {
             PreparedStatement stmt = con.prepareStatement("DELETE FROM Detective WHERE id = ?");
             stmt.setLong(1, detective.getId());
             if (stmt.executeUpdate() > 0) {
@@ -119,8 +158,9 @@ public class JDBCDetective extends IJDBCDAO implements IDetectiveDAO  {
             logger.info("No detective with the id = "+id);
         }
         else {
-            try {
+            try (
                 Connection con = DatabaseUtility.getConnection();
+            ) {
                 PreparedStatement stmt = con.prepareStatement("DELETE FROM Detective WHERE id = ?");
                 stmt.setLong(1,id);
                 if (stmt.executeUpdate() > 0) {
@@ -136,22 +176,9 @@ public class JDBCDetective extends IJDBCDAO implements IDetectiveDAO  {
         }
         return canDelete;
     }
-
-//    public boolean deleteAll() {
-//        int canDelete = 0;
-//        try {
-//            Connection con = DatabaseUtility.getConnection();
-//            Statement st = con.createStatement();
-//            canDelete = st.executeUpdate("DELETE FROM Detective");
-//        } catch(Exception ex) {
-//            logger.error(ex.toString());
-//        }
-//        return canDelete > 0;
-//    }
-
     public static Optional<Detective> findById(long id) {
         Detective detective = null;
-        try (Connection con = DatabaseUtility.getConnection()){
+        try (Connection con = DatabaseUtility.getConnection()) {
             PreparedStatement stmt = con.prepareStatement("SELECT * FROM Detective WHERE id = ?");
             stmt.setLong(1, id);
             ResultSet rs = stmt.executeQuery();
@@ -170,9 +197,18 @@ public class JDBCDetective extends IJDBCDAO implements IDetectiveDAO  {
         return Optional.empty();
     }
 
-    private static final String deleteAll = "DELETE FROM Detective";
+    private static final String deleteAll = "DELETE FROM Detective ";
 
-    public void deleteAll () {
-        super.deleteAll(deleteAll);
+    public void deleteAll() {
+        try (
+                Connection con = DatabaseUtility.getConnection();
+                Statement st = con.createStatement();
+        ) {
+            st.executeUpdate(deleteAll);
+        } catch (SQLException ex) {
+            logger.error(ex.toString());
+        } catch (Exception ex) {
+            logger.error(ex.toString());
+        }
     }
 }

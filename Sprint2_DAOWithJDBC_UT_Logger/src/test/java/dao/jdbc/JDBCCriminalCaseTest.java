@@ -1,10 +1,8 @@
 package dao.jdbc;
 
-import dao.ICriminalCaseDAO;
-import model.CriminalCase;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import static org.junit.jupiter.api.Assertions.*;
 
 class JDBCCriminalCaseTest {
 
@@ -18,13 +16,6 @@ class JDBCCriminalCaseTest {
 
     @Test
     void getAll() {
-        ICriminalCaseDAO criminalCaseDAO = new JDBCCriminalCase();
-
-        //A2
-        List<CriminalCase> criminalCaseList = criminalCaseDAO.getAll();
-
-        //A3: Assert
-        System.out.println(criminalCaseList);
     }
 
     @Test
@@ -33,5 +24,17 @@ class JDBCCriminalCaseTest {
 
     @Test
     void delete() {
+    }
+
+    @Test
+    void deleteById() {
+    }
+
+    @Test
+    void findById() {
+    }
+
+    @Test
+    void deleteAll() {
     }
 }
