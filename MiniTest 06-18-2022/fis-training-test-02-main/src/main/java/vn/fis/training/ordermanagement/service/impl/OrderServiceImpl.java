@@ -46,7 +46,6 @@ public class OrderServiceImpl implements OrderService {
         orderItemRepository.save(orderItem);
         orderRepository.save(order);
 
-
         return order;
     }
 
@@ -81,6 +80,7 @@ public class OrderServiceImpl implements OrderService {
             updatingOrder.setStatus(orderStatus);
             orderRepository.save(updatingOrder);
         }
+        
         return optionalOrder.get();
     }
 

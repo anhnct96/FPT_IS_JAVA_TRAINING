@@ -1,0 +1,40 @@
+spring:
+  main:
+    banner-mode: off
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/criminal_management_application
+    username: root
+    password: 1234
+
+    platform: mysql
+#    data: classpath:data.sql
+#    schema: classpath:schema.sql
+#    initialization-mode: always
+
+    hikari:
+      connection-timeout: 30000
+      maximum-pool-size: 20
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+    defer-datasource-initialization: true
+
+#  sql:
+#    init:
+#      mode: always
+
+    properties:
+      hibernate:
+        validator:
+          apply_to_ddl: false
+        format_sql: true
+
+server:
+  port: 8081
+
+

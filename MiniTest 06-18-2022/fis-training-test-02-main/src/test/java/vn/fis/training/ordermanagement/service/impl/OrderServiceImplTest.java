@@ -42,8 +42,7 @@ class OrderServiceImplTest {
     }
 
     @Test
-    @Transactional
-    @Rollback
+
     void addOrderItem() {
         Customer customer = new Customer(1L,"Thao","0125416879","nam dinh");
         Order order = new Order(1L, LocalDateTime.of(2022,06,18,00,00,00),
