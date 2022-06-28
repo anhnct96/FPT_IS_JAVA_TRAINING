@@ -1,6 +1,7 @@
 package fis.ra.criminalmanagementsystem.repository.authorization;
 
 import fis.ra.criminalmanagementsystem.model.Detective;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,14 +14,14 @@ import java.util.Collections;
 
 @Data
 @AllArgsConstructor
-
+@ToString
 public class DetectiveDetails implements UserDetails{
 
     Detective detective;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(detective.getRank().toString()));
+        return Collections.singleton(new SimpleGrantedAuthority(String.valueOf(detective.getRank())));
     }
 
     @Override
@@ -35,21 +36,21 @@ public class DetectiveDetails implements UserDetails{
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

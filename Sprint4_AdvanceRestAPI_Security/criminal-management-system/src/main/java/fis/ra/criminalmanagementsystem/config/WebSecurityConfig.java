@@ -38,10 +38,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth)
-            throws Exception {
-        auth.userDetailsService(detectiveService)
-                .passwordEncoder(passwordEncoder());
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(detectiveService).passwordEncoder(passwordEncoder());
     }
 
     @Override
@@ -50,8 +48,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .cors()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/login").permitAll()
-                .anyRequest().authenticated();
+                .antMatchers("/**").access("hasRole('TRAINEE')")
+                .antMatchers("/**").access("hasRole('ROLE_TRAINEE')")
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .and()
+                .httpBasic();
         http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 }

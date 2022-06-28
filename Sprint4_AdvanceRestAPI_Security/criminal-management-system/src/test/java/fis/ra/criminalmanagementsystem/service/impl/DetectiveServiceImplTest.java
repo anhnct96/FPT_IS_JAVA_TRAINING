@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 class DetectiveServiceImplTest {
 
     @Autowired
-    DetectiveService DetectiveService;
+    DetectiveService detectiveService;
 
 //    @Test
 //    @Transactional(propagation= Propagation.REQUIRED, readOnly=true, noRollbackFor=Exception.class)
@@ -22,6 +22,26 @@ class DetectiveServiceImplTest {
     @Test
     @Transactional(propagation = Propagation.REQUIRED, readOnly = true, noRollbackFor = Exception.class)
     void getDetectiveById() {
-        System.out.println(DetectiveService.findDetectiveById(1L));
+        System.out.println(detectiveService.findDetectiveById(1L));
+    }
+
+
+    @Test
+    void findByUserName() {
+        System.out.println(detectiveService.findByUserName("anhnd724"));
+    }
+
+    @Test
+    void loadUserByUsername() {
+        System.out.println(detectiveService.loadUserByUsername("anhnd724").getUsername());
+        System.out.println(detectiveService.loadUserByUsername("anhnd724").getPassword());
+        System.out.println(detectiveService.loadUserByUsername("anhnd724").getAuthorities());
+    }
+
+    @Test
+    void loadUserById() {
+        System.out.println(detectiveService.loadUserById(1L).getUsername());
+        System.out.println(detectiveService.loadUserById(1L).getPassword());
+        System.out.println(detectiveService.loadUserById(1L).getAuthorities());
     }
 }

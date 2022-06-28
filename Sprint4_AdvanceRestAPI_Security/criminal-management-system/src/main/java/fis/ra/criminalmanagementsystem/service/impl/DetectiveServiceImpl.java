@@ -158,7 +158,11 @@ public class DetectiveServiceImpl implements DetectiveService {
 
     @Override
     public Detective findByUserName(String username) {
-        return null;
+        Optional<Detective> detective = detectiveRepo.findByUsername(username);
+        if (detective.isEmpty()) {
+            throw new UsernameNotFoundException(username);
+        }
+        return detective.get();
     }
 
     @Override

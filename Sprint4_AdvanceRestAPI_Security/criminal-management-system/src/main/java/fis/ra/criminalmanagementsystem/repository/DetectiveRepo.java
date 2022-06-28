@@ -9,6 +9,5 @@ import java.util.Optional;
 @Repository
 public interface DetectiveRepo extends JpaRepository<Detective, Long> {
     Optional<Detective> findByUsername(String username);
-
     Optional<Detective> findByBadgeNumber(String badgeNumber);
 }

@@ -9,12 +9,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@RestController
+@RequestMapping("/api")
 public class LoginController {
     @Autowired
     AuthenticationManager authenticationManager;
@@ -31,15 +31,9 @@ public class LoginController {
                         loginRequest.getPassword()
                 )
         );
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         String jwt = tokenProvider.generateToken((DetectiveDetails) authentication.getPrincipal());
         return new LoginResponse(jwt);
-    }
-
-    @GetMapping("/random")
-    public String randomStuff(){
-        return "hihi";
     }
 }
