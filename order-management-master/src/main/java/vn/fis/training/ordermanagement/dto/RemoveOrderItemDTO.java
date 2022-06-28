@@ -1,0 +1,15 @@
+package vn.fis.training.ordermanagement.dto;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class RemoveOrderItemDTO {
+    private Long orderId;
+    private Long orderItemId;
+}
